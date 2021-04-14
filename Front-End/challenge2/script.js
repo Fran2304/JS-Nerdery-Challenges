@@ -28,7 +28,7 @@ function calculate(a, b, symbol) {
 	case 'X':
 		res = a * b;
 		break;
-	case 'division':
+	case '/':
 		res = a / b;
 		break;
 	default:
