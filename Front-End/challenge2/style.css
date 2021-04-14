@@ -57,6 +57,10 @@ button {
 	border-radius: 0 0 12px 0;
 }
 
+.clear{
+	background-color: #e04d4d;
+	color: #FFFFFF;
+}
 .operation-btn {
 	color: #FFFFFF;
 	background-color: #ff9501;
