@@ -89,16 +89,11 @@ The last 3 digits for the sum of powers from 1 to 10 is "317"
 const ownPower = (number, lastDigits) => {
 	// YOUR CODE HERE...
 	let myResult = 0;
-	let count = 1;
-	for (let i = 0; i < number; i++) {
-		const powered = count ** count;
-		myResult += powered;
-		count += 1;
+	for (let i = 1; i <= number; i++) {
+		myResult += i ** i;
 	}
-	// const precise = myResult.toPrecision(Math.floor(Math.log10(myResult) + 1));
 	const precise = BigInt(myResult);
 	const last = precise.toString().slice(-lastDigits);
-	// console.log(last);
 	return last;
 };
 
@@ -134,18 +129,14 @@ const digitSum = (n) => {
 
 	let total = 1;
 	for (let i = n; i > 0; i--) {
-		// console.log(i);
 		total *= i;
 	}
-
-	// console.log(total);
 
 	const digits = BigInt(total);
 	let sumeDigits = 0;
 	digits.toString().split('').forEach((digit) => {
 		sumeDigits += parseInt(digit, 10);
 	});
-	// console.log(sumeDigits);
 	return sumeDigits;
 };
 
@@ -179,7 +170,6 @@ const fibIndex = (n) => {
 		i += 1;
 		fib[i] = fib[i - 2] + fib[i - 1];
 	}
-	// console.log(fib, i);
 	return i;
 };
 

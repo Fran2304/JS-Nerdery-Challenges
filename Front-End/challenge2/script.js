@@ -1,58 +1,79 @@
-/* eslint-disable default-case */
-/*
-TO-DO:
-
-- Modify this file only
-- The calculator should be completely functional
-
-*/
-const allButtons = document.querySelectorAll('button');
 const display = document.querySelector('#display');
-display.textContent = '';
+const allButtons = document.querySelectorAll('button');
 
-let operatorA; let operatorB; let operation;
+const calculator = {
+	displayContent: '0',
+	operatorA: null,
+	waitingOperatorB: false,
+	operation: null,
+};
 
-function clean() {
-	display.textContent = '';
+function inputDigit(digit) {
+	if (calculator.waitingOperatorB === true) {
+		calculator.displayContent = digit;
+		calculator.waitingOperatorB = false;
+	} else {
+		calculator.displayContent = (calculator.displayContent === '0') ? digit : calculator.displayContent + digit;
+	}
+}
+function calculate(a, b, symbol) {
+	let res = 0;
+	switch (symbol) {
+	case '+':
+		res = a + b;
+		break;
+	case '-':
+		res = a - b;
+		break;
+	case 'X':
+		res = a * b;
+		break;
+	case 'division':
+		res = a / b;
+		break;
+	default:
+		res = b;
+	}
+	return res;
 }
 
 function reset() {
-	display.textContent = '';
-	operatorA = 0;
-	operatorB = 0;
-	operation = 0;
+	calculator.displayContent = '0';
+	calculator.operatorA = null;
+	calculator.waitingOperatorB = false;
+	calculator.operation = null;
 }
 
-function resolve() {
-	let res = 0;
-	switch (operation) {
-	case 'add':
-		res = parseFloat(operatorA) + parseFloat(operatorB);
-		break;
-	case 'subtrack':
-		res = parseFloat(operatorA) - parseFloat(operatorB);
-		break;
-	case 'multiplication':
-		res = parseFloat(operatorA) * parseFloat(operatorB);
-		break;
-	case 'division':
-		res = parseFloat(operatorA) / parseFloat(operatorB);
-		break;
+function handleOperation(operatorSelected) {
+	const input = parseFloat(calculator.displayContent);
+	if (calculator.operatorA === null) {
+		calculator.operatorA = input;
+	} else if (calculator.operation) {
+		const result = calculate(calculator.operatorA, input, calculator.operation);
+		calculator.displayContent = result.toString();
+		calculator.operatorA = result;
 	}
-	reset();
-	display.textContent = res;
+	calculator.waitingOperatorB = true;
+	calculator.operation = operatorSelected;
 }
+
+function updateDisplay() {
+	display.textContent = calculator.displayContent;
+}
+
+updateDisplay();
+
 allButtons.forEach((button) => {
 	button.addEventListener('click', () => {
-		if (Number.isInteger(parseInt(button.textContent, 10))) {
-			display.textContent += button.textContent;
-		} else if (button.id !== 'equals') {
-			operatorA = display.textContent;
-			operation = button.id;
-			clean();
+		if (button.classList.contains('operation-btn')) {
+			handleOperation(button.textContent);
+			updateDisplay();
+		} else if (button.classList.contains('clear')) {
+			reset();
+			updateDisplay();
 		} else {
-			operatorB = display.textContent;
-			resolve();
+			inputDigit(button.textContent);
+			updateDisplay();
 		}
 	});
 });
